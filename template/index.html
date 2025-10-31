@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF Insight Voice</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="container">
+    <h1>PDF Insight Voice</h1>
+        <form id="uploadForm" enctype="multipart/form-data">
+            <label for="file">Upload PDF:</label>
+            <input type="file" id="file" name="file" accept="application/pdf" required autocomplete="off">
+            <button type="submit" id="uploadBtn"><span id="uploadBtnText">Upload</span><span id="uploadBtnSpinner" class="ask-btn-spinner"></span></button>
+        </form>
+        <div id="uploadMessage"></div>
+        <form id="questionForm">
+            <label for="question">Ask a question:</label>
+            <div class="audio-row">
+                <input type="text" id="question" name="question" required class="question-input">
+                                <button type="button" id="micBtn" title="Speak" class="mic-btn"><span id="micIcon"> 
+                                    <svg class="icon-mic" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="22"/><line x1="8" y1="22" x2="16" y2="22"/></svg>
+                                </span></button>
+            </div>
+            <button type="submit" id="askBtn"><span id="askBtnText">Ask</span><span id="askBtnSpinner" class="ask-btn-spinner"></span></button>
+        </form>
+    <div id="answerBox"></div>
+    <button id="downloadPdfBtn">Download Answer as PDF</button>
+    </div>
+    <!-- jsPDF CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script>
+        // Clear upload message when a new file is selected
+        document.getElementById('file').addEventListener('change', function(e) {
+            document.getElementById('uploadMessage').innerHTML = '';
+            // Do not clear or reset the file input here
+            // Optionally, show the file name to the user
+            const fileInput = e.target;
+            if (fileInput.files && fileInput.files.length > 0) {
+                fileInput.setAttribute('data-hasfile', 'true');
+                // Show file name (optional, for better UX)
+                let fileNameLabel = document.getElementById('fileNameLabel');
+                if (!fileNameLabel) {
+                    fileNameLabel = document.createElement('span');
+                    fileNameLabel.id = 'fileNameLabel';
+                    fileInput.parentNode.appendChild(fileNameLabel);
+                }
+                fileNameLabel.textContent = ' ' + fileInput.files[0].name;
+            } else {
+                fileInput.removeAttribute('data-hasfile');
+                const fileNameLabel = document.getElementById('fileNameLabel');
+                if (fileNameLabel) fileNameLabel.textContent = '';
+            }
+        });
+
+        // Handle PDF upload with AJAX and spinner
+        document.getElementById('uploadForm').onsubmit = async function(e) {
+            e.preventDefault();
+            const uploadBtn = document.getElementById('uploadBtn');
+            const uploadBtnText = document.getElementById('uploadBtnText');
+            const uploadBtnSpinner = document.getElementById('uploadBtnSpinner');
+            uploadBtn.disabled = true;
+            uploadBtnSpinner.style.display = 'inline-block';
+            uploadBtnSpinner.innerHTML = `<span class='spinner'></span>`;
+            uploadBtnText.textContent = 'Uploading...';
+
+            const formData = new FormData(document.getElementById('uploadForm'));
+            const response = await fetch('/upload_pdf', {
+                method: 'POST',
+                body: formData
+            });
+            if (response.ok) {
+                document.getElementById('uploadMessage').innerHTML = "<span style='color: #28a745;'>PDF uploaded successfully!</span>";
+            } else {
+                document.getElementById('uploadMessage').innerHTML = "<span style='color: #b00020;'>Failed to upload PDF.</span>";
+            }
+            uploadBtn.disabled = false;
+            uploadBtnSpinner.style.display = 'none';
+            uploadBtnText.textContent = 'Upload';
+        };
+
+        // Audio input (speech-to-text)
+        const micBtn = document.getElementById('micBtn');
+        const micIcon = document.getElementById('micIcon');
+        let recognizing = false;
+        let recognition;
+        if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            recognition = new SpeechRecognition();
+            recognition.lang = 'en-US';
+            recognition.interimResults = false;
+            recognition.maxAlternatives = 1;
+            recognition.onstart = function() {
+                recognizing = true;
+                micIcon.textContent = '🔴';
+            };
+            recognition.onend = function() {
+                recognizing = false;
+                micIcon.textContent = '🎤';
+            };
+            recognition.onresult = function(event) {
+                const transcript = event.results[0][0].transcript;
+                document.getElementById('question').value = transcript;
+            };
+            micBtn.onclick = function(e) {
+                e.preventDefault();
+                if (recognizing) {
+                    recognition.stop();
+                } else {
+                    recognition.start();
+                }
+            };
+        } else {
+            micBtn.disabled = true;
+            micBtn.title = 'Speech recognition not supported';
+        }
+
+        // Audio output (text-to-speech)
+        function speakText(text) {
+            if ('speechSynthesis' in window) {
+                const utter = new SpeechSynthesisUtterance(text);
+                utter.lang = 'en-US';
+                utter.rate = 1;
+                window.speechSynthesis.speak(utter);
+            }
+        }
+
+        document.getElementById('questionForm').onsubmit = async function(e) {
+            e.preventDefault();
+            const askBtn = document.getElementById('askBtn');
+            const askBtnText = document.getElementById('askBtnText');
+            const askBtnSpinner = document.getElementById('askBtnSpinner');
+            // Show spinner and disable button
+            askBtn.disabled = true;
+            askBtnSpinner.style.display = 'inline-block';
+            askBtnSpinner.innerHTML = `<span class="spinner"></span>`;
+            askBtnText.textContent = 'Generating...';
+
+            const question = document.getElementById('question').value;
+            const response = await fetch('/ask', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+                body: `question=${encodeURIComponent(question)}`
+            });
+            const data = await response.json();
+            let html = '';
+            let showDownload = false;
+                        if (data.answer) {
+                                html += `<div class='answer'><b>Answer:</b><br>${data.answer} 
+                                <button class='speak-btn' title='Listen to answer' onclick='window.speakTextFromBtn(this)'>
+                                    <svg class="icon-speaker" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#4f8cff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+                                </button>
+                                <button class='stop-btn' title='Stop audio' onclick='window.stopSpeech()'>
+                                    <svg class="icon-stop" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#b00020" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="6" width="12" height="12" rx="2"/></svg>
+                                </button></div>`;
+        // Stop speech synthesis
+        window.stopSpeech = function() {
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+            }
+        }
+                if (data.sources) {
+                    html += `<div class='sources'><b>Sources:</b> ${data.sources}</div>`;
+                }
+                showDownload = true;
+            } else if (data.error) {
+                html = `<div class='answer error'>${data.error}</div>`;
+            }
+
+            document.getElementById('answerBox').innerHTML = html;
+            document.getElementById('downloadPdfBtn').style.display = showDownload ? 'inline-block' : 'none';
+
+            // Hide spinner and enable button
+            askBtn.disabled = false;
+            askBtnSpinner.style.display = 'none';
+            askBtnText.textContent = 'Ask';
+        };
+
+        // Speaker button handler (global for dynamic content)
+        window.speakTextFromBtn = function(btn) {
+            const answerDiv = btn.closest('.answer');
+            if (answerDiv) {
+                let text = answerDiv.innerText.replace('Answer:', '').replace('🔊', '').trim();
+                speakText(text);
+            }
+        }
+
+        // Download answer as PDF
+        document.getElementById('downloadPdfBtn').onclick = function() {
+            const answerBox = document.getElementById('answerBox');
+            const doc = new window.jspdf.jsPDF();
+            let y = 15;
+            // Extract answer and sources
+            const answerDiv = answerBox.querySelector('.answer');
+            const sourcesDiv = answerBox.querySelector('.sources');
+            if (answerDiv) {
+                doc.setFontSize(14);
+                doc.text('Answer:', 10, y);
+                y += 10;
+                doc.setFontSize(12);
+                const answerLines = doc.splitTextToSize(answerDiv.innerText.replace('Answer:', '').replace('🔊', '').trim(), 180);
+                answerLines.forEach(line => {
+                    doc.text(line, 10, y);
+                    y += 8;
+                });
+                y += 4;
+            }
+            if (sourcesDiv) {
+                doc.setFontSize(13);
+                doc.text('Sources:', 10, y);
+                y += 10;
+                doc.setFontSize(11);
+                const sourceLines = doc.splitTextToSize(sourcesDiv.innerText.replace('Sources:', '').trim(), 180);
+                sourceLines.forEach(line => {
+                    doc.text(line, 10, y);
+                    y += 7;
+                });
+            }
+            doc.save('answer.pdf');
+        };
+    </script>
+</body>
+</html>
