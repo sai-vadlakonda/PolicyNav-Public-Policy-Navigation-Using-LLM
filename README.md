@@ -22,6 +22,20 @@ PDF Insight Voice is a modern web application that lets you upload any PDF, ask 
    - Type your question or use the mic button for voice input. Submit to get an answer.
 3. **Get Answers:**
    - Answers are generated using a language model and relevant PDF content. Listen to answers or download them as PDF.
+```
+   Project Structure
+PDF-Insight-Voice/      
+├── main.py
+├── requirements.txt
+├── README.md
+├── .gitignore
+│
+├── template/
+│   └── index.html
+│
+└── static/
+    └── style.css
+```
 
 ## Setup & Run
 1. **Clone the repository:**
