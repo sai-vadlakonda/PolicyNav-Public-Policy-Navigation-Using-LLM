@@ -68,14 +68,13 @@ PDF-Insight-Voice/
 - All processing is local; no data is sent to third-party servers.
 
 ## Author
-
+**Ekta Sharma**                                             
 **Pradeesh Vasu**          
 📧 *E-mail id:* [pradeeshvasu22@gmail.com]                              
 🌐 *github:* [https://github.com/PradeeshVasu]                              
 💼 *LinkedIn:* [linkedin.com/in/pradeesh-vasu-03486b319](https://www.linkedin.com/in/pradeesh-vasu-03486b319)                            
 **Sai Vadalakonda**                      
-**Sai Surya**                        
-**Ekta Sharma**                        
+**Sai Surya**                                                
 **Pavan Kumar**  
 
 ## License
