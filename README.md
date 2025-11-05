@@ -85,9 +85,9 @@ PDF-Insight-Voice/
 🌐 *github:*              
 💼 *LinkedIn:* 
 **Pavan Kumar**  
-📧 *E-mail id:*                  
-🌐 *github:*              
-💼 *LinkedIn:* 
+📧 *E-mail id:* [pavankumarbushigampala@gmail.com]                              
+🌐 *github:* [https://github.com/Pavan-244]                              
+💼 *LinkedIn:* [linkedin.com/in/pavan244](https://www.linkedin.com/in/pavan244/)
 
 ## License
 Licensed under the **MIT License** — you are free to use, modify, and distribute with attribution.
