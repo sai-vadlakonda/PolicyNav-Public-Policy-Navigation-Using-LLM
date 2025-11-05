@@ -69,9 +69,11 @@ PDF-Insight-Voice/
 
 ## Author
 **Ekta Sharma** 
+
 📧 *E-mail id:*                  
 🌐 *github:*              
 💼 *LinkedIn:* 
+
 **Pradeesh Vasu**          
 📧 *E-mail id:* [pradeeshvasu22@gmail.com]                              
 🌐 *github:* [https://github.com/PradeeshVasu]                              
