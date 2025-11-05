@@ -69,7 +69,6 @@ PDF-Insight-Voice/
 
 ## Author
 **Ekta Sharma** 
-
 📧 *E-mail id:*                  
 🌐 *github:*              
 💼 *LinkedIn:* 
@@ -91,4 +90,4 @@ PDF-Insight-Voice/
 💼 *LinkedIn:* 
 
 ## License
-MIT
+Licensed under the **MIT License** — you are free to use, modify, and distribute with attribution.
