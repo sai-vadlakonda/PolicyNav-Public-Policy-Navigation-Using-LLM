@@ -67,6 +67,16 @@ PDF-Insight-Voice/
 - Make sure LM Studio is running locally for TinyLlama model inference.
 - All processing is local; no data is sent to third-party servers.
 
+## Author
+
+**Pradeesh Vasu**          
+📧 *E-mail id:* [pradeeshvasu22@gmail.com]                              
+🌐 *github:* [https://github.com/PradeeshVasu]                              
+💼 *LinkedIn:* [linkedin.com/in/pradeesh-vasu-03486b319](https://www.linkedin.com/in/pradeesh-vasu-03486b319)                            
+**Sai Vadalakonda**                      
+**Sai Surya**                        
+**Ekta Sharma**                        
+**Pavan Kumar**  
 
 ## License
 MIT
