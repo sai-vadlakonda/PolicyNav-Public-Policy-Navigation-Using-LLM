@@ -82,6 +82,7 @@ PDF-Insight-Voice/
 📧 *E-mail id:* [sai2592004@gmail.com]            
 🌐 *github:* [https://github.com/sai-vadlakonda]                  
 💼 *LinkedIn:* [https://www.linkedin.com/in/sai-vadlakonda/]
+
 **Sai Surya**  
 📧 *E-mail id:*                  
 🌐 *github:*              
