@@ -78,10 +78,10 @@ PDF-Insight-Voice/
 📧 *E-mail id:* [pradeeshvasu22@gmail.com]                              
 🌐 *github:* [https://github.com/PradeeshVasu]                              
 💼 *LinkedIn:* [linkedin.com/in/pradeesh-vasu-03486b319](https://www.linkedin.com/in/pradeesh-vasu-03486b319)                            
-**Sai Vadalakonda**  
-📧 *E-mail id:*                  
-🌐 *github:*              
-💼 *LinkedIn:* 
+**Sai Vadalakonda**                     
+📧 *E-mail id:* [sai2592004@gmail.com]            
+🌐 *github:* [https://github.com/sai-vadlakonda]                  
+💼 *LinkedIn:* [https://www.linkedin.com/in/sai-vadlakonda/]
 **Sai Surya**  
 📧 *E-mail id:*                  
 🌐 *github:*              
