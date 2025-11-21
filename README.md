@@ -70,9 +70,9 @@ PDF-Insight-Voice/
 ## Author
 **Ekta Sharma** 
 
-📧 *E-mail id:*                  
-🌐 *github:*              
-💼 *LinkedIn:* 
+📧 *E-mail id:* ektasharma4462@gmail.com                  
+🌐 *github:* https://github.com/ekta-240    
+💼*LinkedIn:*https://www.linkedin.com/in/ekta--sharma24/
 
 **Pradeesh Vasu**          
 📧 *E-mail id:* [pradeeshvasu22@gmail.com]                              
